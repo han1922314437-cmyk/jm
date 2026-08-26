@@ -1,0 +1,5 @@
+0000000000000000000000000000000000000000 83a3a8e2f5d90f3083fb80decae4479e2bffff67 hansiyi <hsy1922314437@icloud.com> 1777195482 +0800	commit (initial): Initial Vercel-ready JoyMove fee calculator
+83a3a8e2f5d90f3083fb80decae4479e2bffff67 ecf2d1e5b113f77748cadb8fd3df6784ae4a7b34 hansiyi <hsy1922314437@icloud.com> 1777195506 +0800	commit (amend): Initial Vercel-ready JoyMove fee calculator
+ecf2d1e5b113f77748cadb8fd3df6784ae4a7b34 b3fe9e5df13b80f674088bf6ca59adaf06cf1b91 hansiyi <hsy1922314437@icloud.com> 1777198714 +0800	commit: Add language selection landing flow
+b3fe9e5df13b80f674088bf6ca59adaf06cf1b91 ed78b2c754b4978416f532001dd7c426a2224bfb hansiyi <hsy1922314437@icloud.com> 1777203474 +0800	commit: Fix language selection render flow
+ed78b2c754b4978416f532001dd7c426a2224bfb 12047bd8dd356517b219bf6d0d8b1f99022844fe hansiyi <hsy1922314437@icloud.com> 1777204777 +0800	commit: Add opening hours and WhatsApp booking flow
