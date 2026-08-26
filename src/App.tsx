@@ -613,7 +613,7 @@ function buildWhatsAppLink({
   pax,
   isMember,
   joinMember,
-  duration,
+  weekendDuration,
   total,
   currentHours,
 }: {
@@ -624,13 +624,13 @@ function buildWhatsAppLink({
   pax: number;
   isMember: boolean;
   joinMember: boolean;
-  duration: Duration;
+  weekendDuration: Duration;
   total: number;
   currentHours: string;
 }): string {
   const visitType = dayType === "weekday" ? copy.weekdayLabel : copy.weekendLabel;
   const activityCopy = ACTIVITY_COPY[language];
-  const message = [
+  const messageLines = [
     copy.whatsappIntro,
     "",
     `${activityCopy.whatsappLabel}: ${formatActivity(language, activity)}`,
@@ -644,15 +644,13 @@ function buildWhatsAppLink({
     `${copy.whatsappPreferredTime}: `,
     `${copy.whatsappName}: `,
     `${copy.whatsappPhone}: `,
-  ].join("\n");
+  ];
 
   if (dayType === "weekend") {
-    const lines = message.split("\n");
-    lines.splice(6, 0, `${copy.whatsappDuration}: ${formatDuration(copy, duration)}`);
-    return `${WHATSAPP_URL}&text=${encodeURIComponent(lines.join("\n"))}`;
+    messageLines.splice(6, 0, `${copy.whatsappDuration}: ${formatDuration(copy, weekendDuration)}`);
   }
 
-  return `${WHATSAPP_URL}&text=${encodeURIComponent(message)}`;
+  return `${WHATSAPP_URL}&text=${encodeURIComponent(messageLines.join("\n"))}`;
 }
 
 function buildPerlerWhatsAppLink({
@@ -704,7 +702,7 @@ export default function App() {
   const [perlerPackage, setPerlerPackage] = useState<PerlerPackage>("1h");
   const [isMember, setIsMember] = useState(false);
   const [joinMember, setJoinMember] = useState(false);
-  const [duration, setDuration] = useState<Duration>("2");
+  const [weekendDuration, setWeekendDuration] = useState<Duration>("2");
 
   const fallbackLanguage: Language = language ?? "en";
   const copy = COPY[fallbackLanguage];
@@ -722,7 +720,7 @@ export default function App() {
       dayType,
       pax,
       isMember: finalIsMember,
-      duration,
+      duration: weekendDuration,
       language: fallbackLanguage,
     });
 
@@ -742,11 +740,11 @@ export default function App() {
     copy.detailMemberPricing,
     copy.detailNonMemberPricing,
     dayType,
-    duration,
     fallbackLanguage,
     finalIsMember,
     joinMember,
     pax,
+    weekendDuration,
   ]);
 
   const whatsappLink = buildWhatsAppLink({
@@ -757,7 +755,7 @@ export default function App() {
     pax,
     isMember,
     joinMember,
-    duration,
+    weekendDuration,
     total: result.total,
     currentHours,
   });
@@ -1060,13 +1058,13 @@ export default function App() {
             {dayType === "weekend" && (
               <Section step={isMember ? "04" : "05"} title={copy.sectionDurationTitle} subtitle={copy.sectionDurationSubtitle}>
                 <div className="choice-grid three-cols">
-                  <Choice active={duration === "2"} onClick={() => setDuration("2")}>
+                  <Choice active={weekendDuration === "2"} onClick={() => setWeekendDuration("2")}>
                     <span>{copy.duration2}</span>
                   </Choice>
-                  <Choice active={duration === "3"} onClick={() => setDuration("3")}>
+                  <Choice active={weekendDuration === "3"} onClick={() => setWeekendDuration("3")}>
                     <span>{copy.duration3}</span>
                   </Choice>
-                  <Choice active={duration === "unlimited"} onClick={() => setDuration("unlimited")}>
+                  <Choice active={weekendDuration === "unlimited"} onClick={() => setWeekendDuration("unlimited")}>
                     <span>{copy.durationUnlimited}</span>
                   </Choice>
                 </div>
