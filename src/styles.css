@@ -521,29 +521,6 @@ a {
   margin-top: 8px;
 }
 
-.hours-inline-box {
-  margin-top: 14px;
-  padding: 13px 14px;
-  border: 2px solid #142013;
-  border-radius: 18px;
-  background: #fff4d6;
-  box-shadow: 3px 3px 0 #142013;
-}
-
-.hours-inline-label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 0.8rem;
-  font-weight: 900;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #d24134;
-}
-
-.hours-inline-box strong {
-  font-size: 1rem;
-}
-
 @media (max-width: 920px) {
   .hero {
     flex-direction: column;

@@ -637,7 +637,6 @@ function buildWhatsAppLink({
     `${copy.whatsappVisitType}: ${visitType}`,
     `${copy.whatsappGroupSize}: ${pax} ${copy.paxUnit}`,
     `${copy.whatsappMembership}: ${formatMembership(copy, isMember, joinMember)}`,
-    `${copy.whatsappDuration}: ${formatDuration(copy, duration)}`,
     `${copy.whatsappEstimatedTotal}: RM${total}`,
     `${copy.whatsappCurrentHours}: ${currentHours}`,
     "",
@@ -646,6 +645,12 @@ function buildWhatsAppLink({
     `${copy.whatsappName}: `,
     `${copy.whatsappPhone}: `,
   ].join("\n");
+
+  if (dayType === "weekend") {
+    const lines = message.split("\n");
+    lines.splice(6, 0, `${copy.whatsappDuration}: ${formatDuration(copy, duration)}`);
+    return `${WHATSAPP_URL}&text=${encodeURIComponent(lines.join("\n"))}`;
+  }
 
   return `${WHATSAPP_URL}&text=${encodeURIComponent(message)}`;
 }
@@ -862,7 +867,6 @@ export default function App() {
             <div className="hero-copy-block">
               <p className="eyebrow">Joy Move</p>
               <h1>{perlerCopy.pageTitle}</h1>
-              <p className="hero-copy">{perlerCopy.pageSubtitle}</p>
             </div>
 
             <div className="hero-actions">
@@ -1001,11 +1005,6 @@ export default function App() {
                   <span>{copy.weekendLabel}</span>
                   <small>{copy.weekendHint}</small>
                 </Choice>
-              </div>
-
-              <div className="hours-inline-box">
-                <span className="hours-inline-label">{copy.currentHoursLabel}</span>
-                <strong>{currentHours}</strong>
               </div>
             </Section>
 
