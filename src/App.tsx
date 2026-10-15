@@ -29,7 +29,7 @@ type Duration = "2" | "3" | "unlimited";
 type RoomType = "small" | "large";
 type Language = "en" | "zh";
 type Activity = "perler" | "switch-boardgames";
-type PerlerPackage = "1h" | "3h" | "5h" | "full-day";
+type PerlerPackage = "0.5h" | "1h" | "3h" | "5h" | "full-day";
 
 type FeeInput = {
   dayType: DayType;
@@ -323,15 +323,16 @@ const PERLER_COPY = {
   en: {
     pageTitle: "Perler Beads",
     pageSubtitle:
-      "Perler Beads are priced per person. Choose 1 hour, 3 hours, 5 hours, or a full-day pass. Full-day rates depend on the visit day.",
+      "Perler Beads are priced per person. Choose half an hour, 1 hour, 3 hours, 5 hours, or a full-day pass. Prices are the same on all visit days.",
     rateLabel: "Per person",
-    rateValue: "From RM15",
+    rateValue: "From RM8",
     paxTitle: "Group size",
     paxSubtitle: "Choose how many people will join",
     dayTitle: "Visit day",
-    daySubtitle: "Full-day pricing changes by day",
+    daySubtitle: "The same prices apply on all visit days",
     packageTitle: "Choose a package",
     packageSubtitle: "All prices are charged per person",
+    packageHalfHourLabel: "Half hour",
     package1Label: "1 hour",
     package3Label: "3 hours",
     package5Label: "5 hours",
@@ -351,15 +352,16 @@ const PERLER_COPY = {
   zh: {
     pageTitle: "Perler Beads \u62fc\u8c46",
     pageSubtitle:
-      "\u62fc\u8c46\u6309\u6bcf\u4f4d\u987e\u5ba2\u8ba1\u4ef7\uff0c\u53ef\u9009 1 \u5c0f\u65f6\u30013 \u5c0f\u65f6\u30015 \u5c0f\u65f6\u6216\u5168\u5929\u7968\uff0c\u5168\u5929\u7968\u4ef7\u683c\u4f1a\u6839\u636e\u51fa\u73b0\u65e5\u671f\u4e0d\u540c\u3002",
+      "\u62fc\u8c46\u6309\u6bcf\u4eba\u8ba1\u4ef7\uff0c\u53ef\u9009\u534a\u5c0f\u65f6\u30011 \u5c0f\u65f6\u30013 \u5c0f\u65f6\u30015 \u5c0f\u65f6\u6216\u5305\u5929\uff0c\u6240\u6709\u65e5\u671f\u4ef7\u683c\u76f8\u540c\u3002",
     rateLabel: "\u6bcf\u4eba\u4ef7\u683c",
-    rateValue: "\u8d77\u4ef7 RM15",
+    rateValue: "\u8d77\u4ef7 RM8",
     paxTitle: "\u4eba\u6570",
     paxSubtitle: "\u9009\u62e9\u53c2\u4e0e\u7684\u4eba\u6570",
     dayTitle: "\u9884\u7ea6\u65e5\u671f",
-    daySubtitle: "\u5168\u5929\u7968\u4ef7\u683c\u4f1a\u6839\u636e\u65e5\u671f\u4e0d\u540c",
+    daySubtitle: "\u6240\u6709\u65e5\u671f\u4ef7\u683c\u76f8\u540c",
     packageTitle: "\u9009\u62e9\u5957\u9910",
     packageSubtitle: "\u4ef7\u683c\u5747\u4ee5\u6bcf\u4f4d\u987e\u5ba2\u8ba1\u7b97",
+    packageHalfHourLabel: "\u534a\u5c0f\u65f6",
     package1Label: "1 \u5c0f\u65f6",
     package3Label: "3 \u5c0f\u65f6",
     package5Label: "5 \u5c0f\u65f6",
@@ -378,53 +380,41 @@ const PERLER_COPY = {
   },
 } as const;
 const PERLER_PRICES = {
+  "0.5h": 8,
   "1h": 15,
-  "3h": 39,
-  "5h": 59,
-  "full-day": {
-    weekday: 79.9,
-    weekend: 99.9,
-  },
+  "3h": 35,
+  "5h": 50,
+  "full-day": 79,
 } as const;
 
 function formatMoney(amount: number): string {
   return Number.isInteger(amount) ? `RM${amount}` : `RM${amount.toFixed(2)}`;
 }
 
-function getPerlerPackagePrice(perlerPackage: PerlerPackage, dayType: DayType): number {
-  if (perlerPackage === "full-day") {
-    return dayType === "weekday" ? PERLER_PRICES["full-day"].weekday : PERLER_PRICES["full-day"].weekend;
-  }
-
+function getPerlerPackagePrice(perlerPackage: PerlerPackage, _dayType: DayType): number {
   return PERLER_PRICES[perlerPackage];
 }
 
 function getPerlerPackageLabel(
-  copy: Copy,
+  _copy: Copy,
   perlerCopy: {
+    packageHalfHourLabel: string;
     package1Label: string;
     package3Label: string;
     package5Label: string;
     packageFullDayLabel: string;
   },
   perlerPackage: PerlerPackage,
-  dayType: DayType,
+  _dayType: DayType,
 ): string {
-  if (perlerPackage === "1h") {
-    return perlerCopy.package1Label;
-  }
-
-  if (perlerPackage === "3h") {
-    return perlerCopy.package3Label;
-  }
-
-  if (perlerPackage === "5h") {
-    return perlerCopy.package5Label;
-  }
-
-  const dayLabel = dayType === "weekday" ? copy.weekdayLabel : copy.weekendLabel;
-  const price = formatMoney(getPerlerPackagePrice(perlerPackage, dayType));
-  return `${perlerCopy.packageFullDayLabel} (${dayLabel} ${price})`;
+  const labels = {
+    "0.5h": perlerCopy.packageHalfHourLabel,
+    "1h": perlerCopy.package1Label,
+    "3h": perlerCopy.package3Label,
+    "5h": perlerCopy.package5Label,
+    "full-day": perlerCopy.packageFullDayLabel,
+  };
+  return labels[perlerPackage];
 }
 
 function calculatePerlerTotal(pax: number, perlerPackage: PerlerPackage, dayType: DayType): number {
@@ -445,28 +435,28 @@ const PERLER_TEST_CASES: Array<{ name: string; pax: number; perlerPackage: Perle
     pax: 3,
     perlerPackage: "3h",
     dayType: "weekday",
-    expected: 117,
+    expected: 105,
   },
   {
     name: "Perler 5 hours package",
     pax: 4,
     perlerPackage: "5h",
     dayType: "weekend",
-    expected: 236,
+    expected: 200,
   },
   {
     name: "Perler full day weekday",
     pax: 1,
     perlerPackage: "full-day",
     dayType: "weekday",
-    expected: 79.9,
+    expected: 79,
   },
   {
     name: "Perler full day weekend",
     pax: 2,
     perlerPackage: "full-day",
     dayType: "weekend",
-    expected: 199.8,
+    expected: 158,
   },
 ];
 
@@ -770,6 +760,11 @@ export default function App() {
   });
   const perlerPackageChoices = [
     {
+      value: "0.5h" as const,
+      label: perlerCopy.packageHalfHourLabel,
+      price: formatMoney(getPerlerPackagePrice("0.5h", dayType)),
+    },
+    {
       value: "1h" as const,
       label: perlerCopy.package1Label,
       price: formatMoney(getPerlerPackagePrice("1h", dayType)),
@@ -787,7 +782,7 @@ export default function App() {
     {
       value: "full-day" as const,
       label: perlerCopy.packageFullDayLabel,
-      price: `${copy.weekdayLabel} ${formatMoney(getPerlerPackagePrice("full-day", "weekday"))}\n${copy.weekendLabel} ${formatMoney(getPerlerPackagePrice("full-day", "weekend"))}`,
+      price: formatMoney(getPerlerPackagePrice("full-day", dayType)),
     },
   ];
   if (language === null) {
