@@ -143,11 +143,11 @@ const COPY: Record<Language, Copy> = {
     chooseChineseHint: "进入中文页面",
     hoursTitle: "Opening Hours",
     hoursWeekdayLabel: "Mon - Thu",
-    hoursWeekdayValue: "5:00 PM - 11:00 PM",
+    hoursWeekdayValue: "1:00 PM - 11:00 PM (please notify us if visiting between 1:00 PM and 4:00 PM)",
     hoursWeekendLabel: "Fri - Sun & Public Holidays",
     hoursWeekendValue: "1:00 PM - 11:00 PM",
     currentHoursLabel: "Current hours",
-    currentHoursWeekday: "5:00 PM - 11:00 PM",
+    currentHoursWeekday: "1:00 PM - 11:00 PM (please notify us if visiting between 1:00 PM and 4:00 PM)",
     currentHoursWeekend: "1:00 PM - 11:00 PM",
     sectionVisitTitle: "Visit type",
     sectionVisitSubtitle: "Choose between per-person and per-room pricing",
@@ -223,11 +223,11 @@ const COPY: Record<Language, Copy> = {
     chooseChineseHint: "进入中文页面",
     hoursTitle: "营业时间",
     hoursWeekdayLabel: "星期一至星期四",
-    hoursWeekdayValue: "下午 5:00 - 晚上 11:00（如果需要3pm-4pm开门，请提前两小时预约）",
+    hoursWeekdayValue: "下午 1:00 - 晚上 11:00（如果1pm-4pm到店请提前通知）",
     hoursWeekendLabel: "星期五至星期日及公共假期",
     hoursWeekendValue: "下午 1:00 - 晚上 11:00",
     currentHoursLabel: "当前营业时间",
-    currentHoursWeekday: "下午 5:00 - 晚上 11:00（如果需要3pm-4pm开门，请提前两小时预约）",
+    currentHoursWeekday: "下午 1:00 - 晚上 11:00（如果1pm-4pm到店请提前通知）",
     currentHoursWeekend: "下午 1:00 - 晚上 11:00",
     sectionVisitTitle: "游玩日期",
     sectionVisitSubtitle: "选择按人头收费或按房间收费",
@@ -880,6 +880,8 @@ export default function App() {
             </div>
           </header>
 
+          <OpeningHours copy={copy} />
+
           <section className="content-grid">
             <div className="panel controls-panel">
               <Section step="01" title={perlerCopy.paxTitle} subtitle={perlerCopy.paxSubtitle}>
@@ -985,6 +987,8 @@ export default function App() {
             </div>
           </div>
         </header>
+
+        <OpeningHours copy={copy} />
 
         <section className="content-grid">
           <div className="panel controls-panel">
@@ -1127,5 +1131,23 @@ function Choice({ active, onClick, children }: ChoiceProps) {
     <button type="button" className={active ? "choice active" : "choice"} onClick={onClick}>
       {children}
     </button>
+  );
+}
+
+function OpeningHours({ copy }: { copy: Copy }) {
+  return (
+    <section className="opening-hours panel" aria-label={copy.hoursTitle}>
+      <h2>{copy.hoursTitle}</h2>
+      <div className="opening-hours-grid">
+        <div>
+          <strong>{copy.hoursWeekdayLabel}</strong>
+          <span>{copy.hoursWeekdayValue}</span>
+        </div>
+        <div>
+          <strong>{copy.hoursWeekendLabel}</strong>
+          <span>{copy.hoursWeekendValue}</span>
+        </div>
+      </div>
+    </section>
   );
 }

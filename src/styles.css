@@ -236,6 +236,38 @@ a {
   align-items: start;
 }
 
+.opening-hours {
+  margin-bottom: 24px;
+  padding: 20px 28px;
+}
+
+.opening-hours h2 {
+  margin: 0 0 14px;
+  font-size: 1.1rem;
+}
+
+.opening-hours-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.opening-hours-grid > div {
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: #dcfce7;
+}
+
+.opening-hours-grid strong,
+.opening-hours-grid span {
+  display: block;
+}
+
+.opening-hours-grid span {
+  margin-top: 4px;
+  color: #405348;
+}
+
 .controls-panel {
   padding: 20px;
 }
@@ -532,6 +564,10 @@ a {
   }
 
   .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .opening-hours-grid {
     grid-template-columns: 1fr;
   }
 
